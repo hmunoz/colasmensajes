@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  myapp:
+    image: docker.io/library/rabbit-streams:0.0.1-SNAPSHOT # Reemplaza esto con la imagen de tu aplicación
+    deploy:
+      replicas: 3  # Número de réplicas del servicio
+    #ports:
+    #  - "8085:8080"  # Mapea el puerto 80 del contenedor al puerto 8080 del host
+    networks:
+      - mynetwork  # Define la red para el servicio
+
+networks:
+  mynetwork:  # Define la red personalizada
