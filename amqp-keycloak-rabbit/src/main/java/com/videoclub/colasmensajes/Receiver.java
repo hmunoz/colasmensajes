@@ -1,12 +1,10 @@
 package com.videoclub.colasmensajes;
 
 
-import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 
 @Service
