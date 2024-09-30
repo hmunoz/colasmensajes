@@ -1,16 +1,25 @@
-package com.videoclub.rabbitstreams;
+package com.videoclub.rabbitstreams.event;
 
 import static java.time.ZonedDateTime.now;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
+import lombok.Getter;
+
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 
-public class Event<K, T> {
+@Getter
+public class Event<K, T> implements Serializable {
+
+
 
     public enum Type {
         CREATE,
         DELETE
     }
+
 
     private final Type eventType;
     private final K key;
@@ -31,17 +40,8 @@ public class Event<K, T> {
         this.eventCreatedAt = now();
     }
 
-    public Type getEventType() {
-        return eventType;
-    }
-
-    public K getKey() {
-        return key;
-    }
-
-    public T getData() {
-        return data;
-    }
+    @JsonIgnore
+    public String getRoutingkey() {return  this.getData().getClass().getSimpleName() + "." + this.getEventType();}
 
     @JsonSerialize(using = ZonedDateTimeSerializer.class)
     public ZonedDateTime getEventCreatedAt() {

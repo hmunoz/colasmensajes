@@ -1,20 +1,40 @@
 spring.application.name: kk-eventos
 
 spring.rabbitmq:
-  host: k8s-lia.unrn.edu.ar
+  host: localhost #k8s-lia.unrn.edu.ar
   port: 30567
   username: taller
   password: taller.2024
 
 spring.cloud.stream.defaultBinder: rabbit
 
-spring.cloud.function.definition: keycloakProcessor
+spring.cloud.function.definition: eventMoviesProcessor;keycloakProcessor
 
 spring.cloud.stream:
   default.contentType: application/json
   bindings.keycloakProcessor-in-0:
     destination: keycloaktaller
     group: videoclub00
+  bindings.eventMoviesProcessor-in-0:
+    destination: movies
+    group: moviesGroup
+  bindings:
+    eventMoviesProcessor-out-0:
+      destination: movies
+      producer:
+        required-groups: auditGroup
+
+spring.cloud.stream.bindings.eventMoviesProcessor-in-0.consumer:
+  maxAttempts: 3
+  backOffInitialInterval: 500
+  backOffMaxInterval: 1000
+  backOffMultiplier: 2.0
+
+spring.cloud.stream.rabbit.bindings.eventMoviesProcessor-in-0.consumer:
+  autoBindDlq: true
+  republishToDlq: true
+  deadLetterExchange: moviesGroupDLX
+  deadLetterQueueName: movies.moviesGroup.dlq
 
 spring.cloud.stream.bindings.keycloakProcessor-in-0.consumer:
   maxAttempts: 3
@@ -26,5 +46,5 @@ spring.cloud.stream.rabbit.bindings.keycloakProcessor-in-0.consumer:
   bindingRoutingKey: "KK.EVENT.*.videoclub00.#"
   autoBindDlq: true
   republishToDlq: true
-  deadLetterExchange: keycloaktaller
+  deadLetterExchange: videoclub00
   deadLetterQueueName: videoclub00.dlq
