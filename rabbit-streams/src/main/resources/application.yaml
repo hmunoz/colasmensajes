@@ -8,34 +8,56 @@ spring.rabbitmq:
 
 spring.cloud.stream.defaultBinder: rabbit
 
-spring.cloud.function.definition: eventMoviesProcessor;keycloakProcessor
+spring.cloud.function.definition: eventMovieProcessor;eventActorProcessor;keycloakProcessor
 
 spring.cloud.stream:
   default.contentType: application/json
-  bindings.keycloakProcessor-in-0:
-    destination: keycloaktaller
-    group: videoclub00
-  bindings.eventMoviesProcessor-in-0:
-    destination: movies
-    group: moviesGroup
   bindings:
-    eventMoviesProcessor-out-0:
-      destination: movies
+    eventMovieProcessor-in-0:
+      destination: eventMovie
+      group: eventGroup
+    eventMovieProcessor-out-0:
+      destination: eventMovie
+      producer:
+        required-groups: auditGroup
+    eventActorProcessor-in-0:
+      destination: eventActor
+      group: eventGroup
+    eventActorProcessor-out-0:
+      destination: eventActor
       producer:
         required-groups: auditGroup
 
-spring.cloud.stream.bindings.eventMoviesProcessor-in-0.consumer:
+spring.cloud.stream.bindings.eventMovieProcessor-in-0.consumer:
   maxAttempts: 3
   backOffInitialInterval: 500
   backOffMaxInterval: 1000
   backOffMultiplier: 2.0
 
-spring.cloud.stream.rabbit.bindings.eventMoviesProcessor-in-0.consumer:
-  #bindingRoutingKey: "Movie.#"
+spring.cloud.stream.rabbit.bindings.eventMovieProcessor-in-0.consumer:
+  #bindingRoutingKey: Movie.#
   autoBindDlq: true
   republishToDlq: true
-  deadLetterExchange: moviesGroupDLX
-  deadLetterQueueName: movies.moviesGroup.dlq
+  deadLetterExchange: eventMovieDLX
+  deadLetterQueueName: eventMovie.eventGroup.dlq
+
+spring.cloud.stream.bindings.eventActorProcessor-in-0.consumer:
+  maxAttempts: 3
+  backOffInitialInterval: 500
+  backOffMaxInterval: 1000
+  backOffMultiplier: 2.0
+
+spring.cloud.stream.rabbit.bindings.eventActorProcessor-in-0.consumer:
+  #bindingRoutingKey: Actor.#
+  autoBindDlq: true
+  republishToDlq: true
+  deadLetterExchange: eventActorDLX
+  deadLetterQueueName: eventActor.eventGroup.dlq
+
+# keycloak exchange keycloaktaller para todos
+spring.cloud.stream.bindings.keycloakProcessor-in-0:
+  destination: keycloaktaller
+  group: videoclub00
 
 spring.cloud.stream.bindings.keycloakProcessor-in-0.consumer:
   maxAttempts: 3
@@ -47,5 +69,5 @@ spring.cloud.stream.rabbit.bindings.keycloakProcessor-in-0.consumer:
   bindingRoutingKey: "KK.EVENT.*.videoclub00.#"
   autoBindDlq: true
   republishToDlq: true
-  deadLetterExchange: videoclub00
-  deadLetterQueueName: videoclub00.dlq
+  deadLetterExchange: keycloaktaller-videoclub00-DLQ
+  deadLetterQueueName: keycloaktaller.videoclub00.dlq

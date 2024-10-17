@@ -4,10 +4,11 @@ package com.videoclub.rabbitstreams.service;
 import com.videoclub.rabbitstreams.exceptions.EventProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import java.util.function.Consumer;
 
-@Service
+@Configuration
 @Slf4j
 public class KkProcessorConfig {
 
