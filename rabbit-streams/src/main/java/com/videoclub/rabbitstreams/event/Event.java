@@ -6,20 +6,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 
 @Getter
-public class Event<K, T> implements Serializable {
-
-
+public class Event<K, T> {
 
     public enum Type {
         CREATE,
         DELETE
     }
-
 
     private final Type eventType;
     private final K key;
