@@ -3,6 +3,7 @@ package com.videoclub.colasmensajes.controller;
 
 import com.videoclub.colasmensajes.event.Event;
 import com.videoclub.colasmensajes.event.MessagePublisher;
+import com.videoclub.colasmensajes.model.Actor;
 import com.videoclub.colasmensajes.model.Movie;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +33,13 @@ public class Integracion {
     }
 
 
+    @GetMapping("/actor")
+    public ResponseEntity<Actor> crearActor() {
+        // Lógica para guardar la película en la base de datos
+        Actor actor = new Actor("Marlon Brando");
+        Event<String, Actor> event = new Event<>(Event.Type.CREATE, actor.getUUID(), actor);
+        messagePublisher.publishEvent(event);
 
+        return ResponseEntity.ok(actor);
+    }
 }

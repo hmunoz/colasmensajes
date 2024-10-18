@@ -10,11 +10,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    public static final String EXCHANGE_NAME = "exchange_videocloud00";
+    // Event
+    @Value("${rabbitmq.event.exchange.name}")
+    private String eventExchange;
 
     @Bean
     public TopicExchange exchangeVideoCloub00() {
-        return new TopicExchange(EXCHANGE_NAME);
+        return new TopicExchange(eventExchange);
     }
 
     @Bean
@@ -22,6 +24,7 @@ public class RabbitMQConfig {
         return new Jackson2JsonMessageConverter();
     }
 
+    // KeyCloak
     @Value("${rabbitmq.queue.name}")
     private String queue;
 
