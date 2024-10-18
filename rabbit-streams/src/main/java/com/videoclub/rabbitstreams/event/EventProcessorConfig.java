@@ -61,7 +61,7 @@ public class EventProcessorConfig {
 
                 case DELETE:
                     String actorId = event.getKey();
-                    log.info("Delete actorId with actorId: {}", actorId);
+                    log.info("Delete actorId with MovieID: {}", actorId);
                     //productService.deleteProduct(productId).block();
                     break;
 

@@ -12,7 +12,6 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import static com.videoclub.rabbitstreams.event.EventProcessorConfig.EVENT_ACTOR_PROCESSOR;
 import static com.videoclub.rabbitstreams.event.EventProcessorConfig.EVENT_MOVIE_PROCESSOR;
 
@@ -22,6 +21,7 @@ public class Integracion {
 
     @Autowired
     private StreamBridge streamBridge;
+
 
     @GetMapping("/movie")
     public void sendCreateMovieEvent() {
