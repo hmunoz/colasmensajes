@@ -48,11 +48,12 @@ public class MessageListener {
     @Retryable(maxAttempts = 3, backoff = @Backoff(delay = 5000))
     public void handleActorEvent(Event<String, Actor> event) {
 
-
         switch (event.getEventType()) {
             case CREATE:
                 // Lógica para crear una película
-                throw new RuntimeException("Error al procesar el mensaje");
+                //throw new RuntimeException("Error al procesar el mensaje");
+                //repositopry.save(event.getData());
+                break;
             case DELETE:
                 // Lógica para eliminar una película
                 break;
